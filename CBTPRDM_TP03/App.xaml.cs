@@ -1,0 +1,18 @@
+/*
+Dupla: André Luiz Nascimento de Andrade
+       João do Valle Seixas Paula
+*/
+namespace CBTPRDM_TP03;
+
+public partial class App : Application
+{
+    public App()
+    {
+        InitializeComponent();
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(new AppShell());
+    }
+}

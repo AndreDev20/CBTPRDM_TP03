@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Dupla: André Luiz Nascimento de Andrade
+       João do Valle Seixas Paula
+-->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:CBTPRDM_TP03.ViewModels"
+             xmlns:models="clr-namespace:CBTPRDM_TP03.Models"
+             x:Class="CBTPRDM_TP03.Views.ResultPage"
+             x:DataType="vm:ResultViewModel"
+             Title="Resultado do rastreamento">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="12">
+
+        <!-- Resumo do pacote -->
+        <Border Grid.Row="0"
+                StrokeThickness="1"
+                Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                StrokeShape="RoundRectangle 12"
+                Padding="16">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                  ColumnDefinitions="Auto,*"
+                  RowSpacing="8"
+                  ColumnSpacing="12">
+
+                <Label Grid.Row="0" Grid.Column="0" Text="Código" FontAttributes="Bold" />
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Package.PackageId}" />
+
+                <Label Grid.Row="1" Grid.Column="0" Text="Status" FontAttributes="Bold" VerticalOptions="Center" />
+                <Border Grid.Row="1" Grid.Column="1"
+                        HorizontalOptions="Start"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12"
+                        Padding="10,4"
+                        BackgroundColor="{Binding Package.Status, Converter={StaticResource StatusToColorConverter}}">
+                    <Label Text="{Binding Package.Status}"
+                           TextColor="White"
+                           FontAttributes="Bold"
+                           FontSize="13" />
+                </Border>
+
+                <Label Grid.Row="2" Grid.Column="0" Text="Localização" FontAttributes="Bold" />
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding Package.CurrentLocation}" />
+
+                <Label Grid.Row="3" Grid.Column="0" Text="Enviado em" FontAttributes="Bold" />
+                <Label Grid.Row="3" Grid.Column="1"
+                       Text="{Binding Package.ShippingDate, StringFormat='{0:dd/MM/yyyy}'}" />
+
+                <Label Grid.Row="4" Grid.Column="0" Text="Previsão" FontAttributes="Bold" />
+                <Label Grid.Row="4" Grid.Column="1"
+                       Text="{Binding Package.EstimatedDeliveryDate, StringFormat='{0:dd/MM/yyyy}'}" />
+            </Grid>
+        </Border>
+
+        <Label Grid.Row="1"
+               Text="Histórico de eventos"
+               FontSize="18"
+               FontAttributes="Bold"
+               SemanticProperties.HeadingLevel="Level2" />
+
+        <!-- Histórico de eventos (mais recente primeiro) -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding History}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:TrackingEvent">
+                    <Border StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray600}}"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="{Binding Description}" FontAttributes="Bold" />
+                            <Label Text="{Binding Location}" FontSize="13" />
+                            <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Grid.Row="3" Text="Nova consulta" Command="{Binding BackCommand}" />
+    </Grid>
+</ContentPage>
